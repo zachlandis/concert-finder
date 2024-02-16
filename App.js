@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native'
+import {NavigationContainer} from '@react-navigation/native'
 import AppNavigator from './AppNavigator';
 
 export default function App() {
@@ -8,4 +8,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
