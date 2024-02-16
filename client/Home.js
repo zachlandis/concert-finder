@@ -7,6 +7,7 @@ function Home() {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Home</Text>
+            <Button title='Logout' onPress={() => nav.navigate('Login')} />
         </View>
     );
 }
