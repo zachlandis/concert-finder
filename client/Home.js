@@ -1,27 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 function Home() {
     const nav = useNavigation();
+    const [darkModeView, setDarkModeView] = useState(false)
+
+    const toggleDarkMode = () => {
+        setDarkModeView(!darkModeView)
+    }
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Home</Text>
+        <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container }>
+            <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Home</Text>
             <Button title='Logout' onPress={() => nav.navigate('Login')} />
+            <Button title='Dark Mode' onPress={() => toggleDarkMode()} />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+    lightMode: {
+        container: {
+            flex: 1,
+            backgroundColor: '#fff',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        title: {
+            color: '#000',
+            fontSize: 20,
+            fontWeight: 'bold',
+        }
     },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
+    darkMode: {
+        container: {
+            flex: 1,
+            backgroundColor: '#000',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        title: {
+            color: '#ffffff',
+            fontSize: 20,
+            fontWeight: 'bold',
+        }
     }
 });
 

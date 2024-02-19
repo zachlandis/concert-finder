@@ -39,9 +39,7 @@ function Events() {
 
   const filteredEDMEvents = EDMEvents.filter(event => 
     event.name.toLowerCase().includes(filter.toLowerCase())
-  );
-  
-  
+  );  
 
   const handlePageChange = (direction) => {
     const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
@@ -56,35 +54,35 @@ function Events() {
   
 
   return (
-    <View style={styles.container}> 
-      <View style={styles.searchBar}>
+    <View style={styles.lightMode.container}> 
+      <View style={styles.lightMode.searchBar}>
         <TextInput 
           placeholder='Search by Event Name'
           value={filter}
           onChangeText={(newText) => setFilter(newText)}
         />
       </View>
-      <View style={styles.pageNav}> 
+      <View style={styles.lightMode.pageNav}> 
         <Button title='⬅️' onPress={() => handlePageChange('⬅️')} />
         <Text>Page: {currentPage + 1}/{totalPages}</Text>
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.lightMode.scrollView}>
         {filteredEDMEvents.map((e) => (
-          <View style={styles.eventContainer} key={e.id}>
-            <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={styles.image} />
-            <View style={styles.textContainer}>
-              <Text style={styles.title}>{e.name}</Text>
+          <View style={styles.lightMode.eventContainer} key={e.id}>
+            <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={styles.lightMode.image} />
+            <View style={styles.lightMode.textContainer}>
+              <Text style={styles.lightMode.title}>{e.name}</Text>
               {e._embedded?.venues?.length > 0 && (
                 <View>
-                  <Text style={styles.venue}>{e._embedded.venues[0].name}</Text>
-                  <View style={styles.cityStateContainer}>
+                  <Text style={styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
+                  <View style={styles.lightMode.cityStateContainer}>
                     <Text>{e._embedded.venues[0].city?.name}, </Text>
                     <Text>{e._embedded.venues[0].state?.stateCode}</Text>
                   </View>
                 </View>
               )}
-              <Text style={styles.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
+              <Text style={styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
             </View>
           </View>
         ))}
@@ -94,60 +92,69 @@ function Events() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  lightMode: {
+    container: {
+      flex: 1,
+    },
+    scrollView: {
+      
+    },
+    eventContainer: {
+      flexDirection: 'row', 
+      backgroundColor: 'lightpink',
+      alignItems: 'center', 
+      justifyContent: 'flex-start', 
+      borderColor: 'black',
+      borderRadius: 10,
+      borderWidth: 1,
+      margin: 5,
+      shadowColor: 'black'
+    },
+    image: {
+      flex: 1, 
+      width: undefined,
+      height: 100,
+      resizeMode: 'cover', 
+      margin: 10,
+      borderRadius: 10,
+    },
+    textContainer: {
+      flex: 2, 
+      padding: 10, 
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 5, 
+    },
+    venue: {
+      fontWeight: 'bold'
+    },
+    date: {
+      fontSize: 14,
+    },
+    cityStateContainer: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    pageNav: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+      paddingTop: 10,
+    },
+    searchBar: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderColor: 'black',
+      height: 40,
+      borderWidth: 1,
+      margin: 20,
+    },  
   },
-  scrollView: {
-    // flex: 1,
-  },
-  eventContainer: {
-    flexDirection: 'row', 
-    backgroundColor: 'pink',
-    alignItems: 'center', 
-    justifyContent: 'flex-start', 
-    borderColor: 'black',
-    borderWidth: 1,
-    margin: 5,
-  },
-  image: {
-    flex: 1, 
-    width: undefined,
-    height: 100,
-    resizeMode: 'cover', 
-  },
-  textContainer: {
-    flex: 2, 
-    padding: 10, 
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5, 
-  },
-  venue: {
-    fontWeight: 'bold'
-  },
-  date: {
-    fontSize: 14,
-  },
-  cityStateContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  pageNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
-    paddingTop: 10,
-  },
-  searchBar: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: 'black',
-    height: 40,
-    borderWidth: 1,
-    margin: 20,
-  },  
+  darkMode: {
+
+  }
 });
 
 export default Events
