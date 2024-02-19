@@ -1,5 +1,6 @@
+import { current } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react'
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native'
+import {View, Text, Image, StyleSheet, ScrollView, Button} from 'react-native'
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
 
@@ -8,6 +9,7 @@ function Events() {
   // const dispatch = useDispatch();
   // const EDMEvents = useSelector((state) => state.events.events)
   const [EDMEvents, setEDMEvents] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0)
 
   // useEffect(() => {
   //   dispatch(fetchEDMEvents())
@@ -18,9 +20,11 @@ function Events() {
   // })
 
   useEffect(() => {
-    const currentPage = 1;
-    const resultsPerPage = 10;
-    fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&number=${resultsPerPage}&offset=${(currentPage - 1) * resultsPerPage}`)
+    fetchEDMEvents(currentPage)
+  }, []); 
+
+  const fetchEDMEvents = (page) => {
+    fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&page=${page}`)
     .then(response => response.json())
     .then(data => {
       if(data._embedded && data._embedded.events) {
@@ -28,13 +32,24 @@ function Events() {
       }
     })
     .catch(error => console.error('There was a problem fetching EDM Events', error));
-  }, []); 
-  
+  }
 
-  
+  const handlePageChange = (direction) => {
+    if(direction === '➡️') {
+      setCurrentPage(currentPage + 1)
+      fetchEDMEvents(currentPage)
+    } else if(direction === '⬅️'){
+      setCurrentPage(currentPage - 1)
+      fetchEDMEvents(currentPage)
+    }
+  }
 
   return (
     <ScrollView style={styles.scrollView}>
+      <View style={styles.pageNav}>
+        <Button title='⬅️' onPress={() => handlePageChange('⬅️')}/>
+        <Button title='➡️' onPress={() => handlePageChange('➡️')}/>
+      </View>
       {EDMEvents.map((e) => (
         <View style={styles.eventContainer} key={e.id}>
           <Image source={{ uri: e.images[0].url }} style={styles.image}/>
@@ -78,6 +93,11 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 14,
+  },
+  pageNav: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
 });
 
