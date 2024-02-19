@@ -1,6 +1,6 @@
 import { current } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react'
-import {View, Text, Image, StyleSheet, ScrollView, Button} from 'react-native'
+import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
 
@@ -11,6 +11,7 @@ function Events() {
   const [EDMEvents, setEDMEvents] = useState([]);
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
+  const [filter, setFilter] = useState('')
 
   // useEffect(() => {
   //   dispatch(fetchEDMEvents())
@@ -35,6 +36,11 @@ function Events() {
       })
       .catch(error => console.error('There was a problem fetching EDM Events', error));
   };
+
+  const filteredEDMEvents = EDMEvents.filter(event => 
+    event.name.toLowerCase().includes(filter.toLowerCase())
+  );
+  
   
 
   const handlePageChange = (direction) => {
@@ -51,13 +57,20 @@ function Events() {
 
   return (
     <View style={styles.container}> 
+      <View style={styles.searchBar}>
+        <TextInput 
+          placeholder='Search by Event Name'
+          value={filter}
+          onChangeText={(newText) => setFilter(newText)}
+        />
+      </View>
       <View style={styles.pageNav}> 
         <Button title='⬅️' onPress={() => handlePageChange('⬅️')} />
         <Text>Page: {currentPage + 1}/{totalPages}</Text>
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
       <ScrollView style={styles.scrollView}>
-        {EDMEvents.map((e) => (
+        {filteredEDMEvents.map((e) => (
           <View style={styles.eventContainer} key={e.id}>
             <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={styles.image} />
             <View style={styles.textContainer}>
@@ -127,6 +140,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
   },
+  searchBar: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'black',
+    height: 40,
+    borderWidth: 1,
+    margin: 20,
+  },  
 });
 
 export default Events
