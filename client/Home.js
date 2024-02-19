@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-function Home() {
+function Home({darkModeView, toggleDarkMode}) {
     const nav = useNavigation();
-    const [darkModeView, setDarkModeView] = useState(false)
-
-    const toggleDarkMode = () => {
-        setDarkModeView(!darkModeView)
-    }
 
     return (
         <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container }>
             <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Home</Text>
             <Button title='Logout' onPress={() => nav.navigate('Login')} />
-            <Button title='Dark Mode' onPress={() => toggleDarkMode()} />
+            <Button title='Dark Mode' onPress={toggleDarkMode} />
         </View>
     );
 }
