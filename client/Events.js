@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {View, Text, StyleSheet, ScrollView} from 'react-native'
+import {View, Text, Image, StyleSheet, ScrollView} from 'react-native'
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
 
@@ -17,37 +17,68 @@ function Events() {
   //   console.log(EDMEvents)
   // })
 
-  useEffect((currentPage = 1, resultsPerPage =  10) => {
+  useEffect(() => {
+    const currentPage = 1;
+    const resultsPerPage = 10;
     fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&number=${resultsPerPage}&offset=${(currentPage - 1) * resultsPerPage}`)
-    .then(r => r.json())
-    .then(events => setEDMEvents(events._embedded.events))
-  })
+    .then(response => response.json())
+    .then(data => {
+      if(data._embedded && data._embedded.events) {
+        setEDMEvents(data._embedded.events);
+      }
+    })
+    .catch(error => console.error('There was a problem fetching EDM Events', error));
+  }, []); 
+  
 
   
 
   return (
-    <ScrollView>
-        {EDMEvents.map((e) => (
-        <View style={styles.container}>
-          <Text style={styles.title}>{e.name}</Text>
-          <Text style={styles.title}>{e.dates.start.localDate}</Text>
+    <ScrollView style={styles.scrollView}>
+      {EDMEvents.map((e) => (
+        <View style={styles.eventContainer} key={e.id}>
+          <Image source={{ uri: e.images[0].url }} style={styles.image}/>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{e.name}</Text>
+            <Text style={styles.date}>{e.dates.start.localDate}</Text>
+          </View>
         </View>
-    ))}
+      ))}
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    }
+  scrollView: {
+    flex: 1,
+  },
+  eventContainer: {
+    flexDirection: 'row', 
+    backgroundColor: 'pink',
+    alignItems: 'center', 
+    justifyContent: 'flex-start', 
+    borderColor: 'black',
+    borderWidth: 1,
+    margin: 5,
+  },
+  image: {
+    flex: 1, 
+    width: undefined,
+    height: 100,
+    resizeMode: 'cover', 
+  },
+  textContainer: {
+    flex: 2, 
+    padding: 10, 
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5, 
+  },
+  date: {
+    fontSize: 14,
+  },
 });
 
 export default Events
