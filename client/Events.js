@@ -9,6 +9,7 @@ function Events() {
   // const dispatch = useDispatch();
   // const EDMEvents = useSelector((state) => state.events.events)
   const [EDMEvents, setEDMEvents] = useState([]);
+  const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
 
   // useEffect(() => {
@@ -29,25 +30,24 @@ function Events() {
     .then(data => {
       if(data._embedded && data._embedded.events) {
         setEDMEvents(data._embedded.events);
+        setTotalPages(data.page.totalPages)
       }
     })
     .catch(error => console.error('There was a problem fetching EDM Events', error));
   }
 
   const handlePageChange = (direction) => {
-    if(direction === '➡️') {
-      setCurrentPage(currentPage + 1)
-      fetchEDMEvents(currentPage)
-    } else if(direction === '⬅️'){
-      setCurrentPage(currentPage - 1)
-      fetchEDMEvents(currentPage)
-    }
-  }
+    const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
+    setCurrentPage(newPage);
+    fetchEDMEvents(newPage); 
+  };
+  
 
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.pageNav}>
         <Button title='⬅️' onPress={() => handlePageChange('⬅️')}/>
+        <Text>Page: {currentPage + 1}/{totalPages}</Text>
         <Button title='➡️' onPress={() => handlePageChange('➡️')}/>
       </View>
       {EDMEvents.map((e) => (
@@ -55,6 +55,11 @@ function Events() {
           <Image source={{ uri: e.images[0].url }} style={styles.image}/>
           <View style={styles.textContainer}>
             <Text style={styles.title}>{e.name}</Text>
+            <Text>{e._embedded.venues[0].name}</Text>
+            <View style={styles.cityStateContainer}>
+              <Text>{e._embedded.venues[0].city.name}, </Text>
+              <Text>{e._embedded.venues[0].state.stateCode}</Text>
+            </View>
             <Text style={styles.date}>{e.dates.start.localDate}</Text>
           </View>
         </View>
@@ -94,10 +99,15 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 14,
   },
+  cityStateContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   pageNav: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
 });
 
