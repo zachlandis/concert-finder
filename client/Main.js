@@ -11,8 +11,7 @@ function Main() {
 
   const toggleDarkMode = () => {
     setDarkModeView(!darkModeView)
-    console.log("Dark Mode: ", darkModeView )
-}
+  }
 
   const HomeScreen = () => <Home darkModeView={darkModeView} toggleDarkMode={toggleDarkMode} />;
   const EventsScreen = () => <Events darkModeView={darkModeView} toggleDarkMode={toggleDarkMode} />;

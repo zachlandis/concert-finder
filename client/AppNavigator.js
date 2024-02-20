@@ -7,9 +7,9 @@ const Stack = createStackNavigator();
 
 function AppNavigator() {
   return (
-    <Stack.Navigator headerShown='false'>
-        <Stack.Screen name='Login' component={Login} />
-        <Stack.Screen name='Main' component={Main} />
+    <Stack.Navigator >
+        <Stack.Screen name='Login' options={{ headerShown: false }} component={Login} />
+        <Stack.Screen name='Main' options={{ headerShown: false }} component={Main} />
     </Stack.Navigator>
   )
 }

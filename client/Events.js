@@ -5,7 +5,7 @@ import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'reac
 // import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
 
 
-function Events() {
+function Events({darkModeView}) {
   // const dispatch = useDispatch();
   // const EDMEvents = useSelector((state) => state.events.events)
   const [EDMEvents, setEDMEvents] = useState([]);
@@ -18,7 +18,7 @@ function Events() {
   // }, [dispatch])
 
   // useEffect(() => {
-  //   console.log(EDMEvents)
+  //   console.log("From Events: ", darkModeView)
   // })
 
   useEffect(() => {
@@ -54,35 +54,37 @@ function Events() {
   
 
   return (
-    <View style={styles.lightMode.container}> 
-      <View style={styles.lightMode.searchBar}>
+    <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> 
+      <View style={darkModeView ? styles.darkMode.searchBar : styles.lightMode.searchBar}>
         <TextInput 
           placeholder='Search by Event Name'
+          placeholderTextColor='#3589d7'
+          style={darkModeView ? styles.darkMode.textInput : styles.lightMode.textInput}
           value={filter}
           onChangeText={(newText) => setFilter(newText)}
         />
       </View>
-      <View style={styles.lightMode.pageNav}> 
+      <View style={darkModeView ? styles.darkMode.pageNav : styles.lightMode.pageNav}> 
         <Button title='⬅️' onPress={() => handlePageChange('⬅️')} />
-        <Text>Page: {currentPage + 1}/{totalPages}</Text>
+        <Text style={darkModeView ? styles.darkMode.pageNavPageNum : styles.lightMode.pageNavPageNum}>Page: {currentPage + 1}/{totalPages}</Text>
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
-      <ScrollView style={styles.lightMode.scrollView}>
+      <ScrollView style={darkModeView ? styles.darkMode.scrollView : styles.lightMode.scrollView}>
         {filteredEDMEvents.map((e) => (
-          <View style={styles.lightMode.eventContainer} key={e.id}>
-            <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={styles.lightMode.image} />
-            <View style={styles.lightMode.textContainer}>
-              <Text style={styles.lightMode.title}>{e.name}</Text>
+          <View style={darkModeView ? styles.darkMode.eventContainer : styles.lightMode.eventContainer} key={e.id}>
+            <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={darkModeView ? styles.lightMode.image : styles.darkMode.image} />
+            <View style={darkModeView ? styles.darkMode.textContainer : styles.lightMode.textContainer}>
+              <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{e.name}</Text>
               {e._embedded?.venues?.length > 0 && (
                 <View>
-                  <Text style={styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
-                  <View style={styles.lightMode.cityStateContainer}>
+                  <Text style={darkModeView ? styles.darkMode.venue : styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
+                  <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
                     <Text>{e._embedded.venues[0].city?.name}, </Text>
                     <Text>{e._embedded.venues[0].state?.stateCode}</Text>
                   </View>
                 </View>
               )}
-              <Text style={styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
+              <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
             </View>
           </View>
         ))}
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
     },
     eventContainer: {
       flexDirection: 'row', 
-      backgroundColor: 'lightpink',
+      backgroundColor: 'white',
       alignItems: 'center', 
       justifyContent: 'flex-start', 
       borderColor: 'black',
@@ -142,19 +144,93 @@ const styles = StyleSheet.create({
       justifyContent: 'space-evenly',
       alignItems: 'center',
       paddingTop: 10,
+      color: '#000',
+    },
+    pageNavPageNum: {
+      color: '#000',
     },
     searchBar: {
       justifyContent: 'center',
       alignItems: 'center',
       borderColor: 'black',
+      color: '#000',
+      height: 40,
+      borderWidth: 1,
+      margin: 20,
+      color: '#000',
+    },  
+  },
+  darkMode: {
+    container: {
+      flex: 1,
+      backgroundColor: 'black',
+    },
+    scrollView: {
+      
+    },
+    eventContainer: {
+      flexDirection: 'row', 
+      backgroundColor: 'black',
+      alignItems: 'center', 
+      justifyContent: 'flex-start', 
+      borderColor: '#5a49a8',
+      borderRadius: 10,
+      borderWidth: 1,
+      margin: 5,
+      shadowColor: 'black'
+    },
+    image: {
+      flex: 1, 
+      width: undefined,
+      height: 100,
+      resizeMode: 'cover', 
+      margin: 10,
+      borderRadius: 10,
+    },
+    textContainer: {
+      flex: 2, 
+      padding: 10, 
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 5, 
+      color: '#beffb5',
+    },
+    venue: {
+      fontWeight: 'bold',
+      color: '#3589d7',
+    },
+    date: {
+      fontSize: 14,
+      color: '#ffffff'
+    },
+    cityStateContainer: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    pageNav: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      alignItems: 'center',
+      paddingTop: 10,
+    },
+    pageNavPageNum: {
+      color: '#3589d7',
+    },
+    searchBar: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#424242',
+      borderColor: '#424242',
       height: 40,
       borderWidth: 1,
       margin: 20,
     },  
+    textInput: {
+      color: '#3589d7',
+    }
   },
-  darkMode: {
-
-  }
 });
 
 export default Events
