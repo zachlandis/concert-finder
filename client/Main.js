@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from './Home';
 import Events from './Events';
+import EventStack from './EventStack';
 
 const Tab = createBottomTabNavigator();
 

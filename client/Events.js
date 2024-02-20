@@ -1,6 +1,7 @@
 import { current } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
 
@@ -12,21 +13,23 @@ function Events({darkModeView}) {
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
   const [filter, setFilter] = useState('')
+  const nav = useNavigation();
 
   // useEffect(() => {
   //   dispatch(fetchEDMEvents())
   // }, [dispatch])
 
-  // useEffect(() => {
-  //   console.log("From Events: ", darkModeView)
-  // })
+  useEffect(() => {
+    console.log("Encoded Filter: ", encodeURIComponent(filter))
+  })
 
   useEffect(() => {
-    fetchEDMEvents(currentPage)
-  }, []); 
+    fetchEDMEvents(currentPage, filter)
+  }, [currentPage, filter]); 
   
   const fetchEDMEvents = (page) => {
-    fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}`)
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}`;
+    fetch(url)
       .then(response => response.json())
       .then(data => {
         if(data._embedded && data._embedded.events) {
@@ -36,10 +39,6 @@ function Events({darkModeView}) {
       })
       .catch(error => console.error('There was a problem fetching EDM Events', error));
   };
-
-  const filteredEDMEvents = EDMEvents.filter(event => 
-    event.name.toLowerCase().includes(filter.toLowerCase())
-  );  
 
   const handlePageChange = (direction) => {
     const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
@@ -70,7 +69,7 @@ function Events({darkModeView}) {
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
       <ScrollView style={darkModeView ? styles.darkMode.scrollView : styles.lightMode.scrollView}>
-        {filteredEDMEvents.map((e) => (
+        {EDMEvents.map((e) => (
           <View style={darkModeView ? styles.darkMode.eventContainer : styles.lightMode.eventContainer} key={e.id}>
             <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={darkModeView ? styles.lightMode.image : styles.darkMode.image} />
             <View style={darkModeView ? styles.darkMode.textContainer : styles.lightMode.textContainer}>
@@ -85,6 +84,12 @@ function Events({darkModeView}) {
                 </View>
               )}
               <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
+            </View>
+            <View>
+            <Button
+              title='See More'
+              onPress={() => nav.navigate('EventPage', { eventDetails: e })}
+            />
             </View>
           </View>
         ))}
