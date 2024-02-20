@@ -3,12 +3,16 @@ import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from './DarkModeContext';
+import EventsFilter from './EventsFilter';
 
 function Events() {
   const [EDMEvents, setEDMEvents] = useState([]);
-  const [totalPages, setTotalPages] = useState(0)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [filter, setFilter] = useState('')
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [displayFilter, setDisplayFilter] = useState(false);
+  const [filter, setFilter] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+  const [radius, setRadius] = useState('')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
 
@@ -17,11 +21,12 @@ function Events() {
   // })
 
   useEffect(() => {
-    fetchEDMEvents(currentPage, filter)
-  }, [currentPage, filter]); 
+    fetchEDMEvents(currentPage, filter, postalCode, radius)
+  }, [currentPage, filter, postalCode, radius]); 
   
   const fetchEDMEvents = (page) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}`;
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&postalCode=${encodeURIComponent(postalCode)}&radius=${encodeURIComponent(radius)}&unit=miles`;
+
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -47,15 +52,21 @@ function Events() {
 
   return (
     <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> 
-      <View style={darkModeView ? styles.darkMode.searchBar : styles.lightMode.searchBar}>
-        <TextInput 
-          placeholder='Search by Event Name'
-          placeholderTextColor='#3589d7'
-          style={darkModeView ? styles.darkMode.textInput : styles.lightMode.textInput}
-          value={filter}
-          onChangeText={(newText) => setFilter(newText)}
-        />
-      </View>
+
+      <Button title="Filter" onPress={() => setDisplayFilter(!displayFilter)}/>
+      {displayFilter ? 
+      <View style={{height: 300}}>
+          <EventsFilter 
+            filter={filter} 
+            setFilter={setFilter} 
+            postalCode={postalCode} 
+            setPostalCode={setPostalCode} 
+            radius={radius}
+            setRadius={setRadius}
+          />
+        </View>
+      : null}
+      
       <View style={darkModeView ? styles.darkMode.pageNav : styles.lightMode.pageNav}> 
         <Button title='⬅️' onPress={() => handlePageChange('⬅️')} />
         <Text style={darkModeView ? styles.darkMode.pageNavPageNum : styles.lightMode.pageNavPageNum}>Page: {currentPage + 1}/{totalPages}</Text>
@@ -147,16 +158,6 @@ const styles = StyleSheet.create({
     pageNavPageNum: {
       color: '#000',
     },
-    searchBar: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderColor: 'black',
-      color: '#000',
-      height: 40,
-      borderWidth: 1,
-      margin: 20,
-      color: '#000',
-    },  
   },
   darkMode: {
     container: {
@@ -216,15 +217,6 @@ const styles = StyleSheet.create({
     pageNavPageNum: {
       color: '#3589d7',
     },
-    searchBar: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#424242',
-      borderColor: '#424242',
-      height: 40,
-      borderWidth: 1,
-      margin: 20,
-    },  
     textInput: {
       color: '#3589d7',
     }
