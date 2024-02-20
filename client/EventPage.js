@@ -7,23 +7,73 @@ function EventPage({ route }) {
   const { eventDetails } = route.params;
   const { darkModeView } = useDarkMode();
 
+  // useEffect(() => {
+  //   console.log(eventDetails.info);
+  // })
+
 
   const createPrettyDate = (date) => {
     const splitDate = date.split('-')
     return `${splitDate[1]}/${splitDate[2]}/${splitDate[0]}`
   }
 
+  const createPrettyTime = (militaryTime) => {
+    const splitTime = militaryTime.split(':')
+    if (splitTime[0] > 12) {
+      return `${splitTime[0] - 12}:${splitTime[1]} PM`
+    } else {
+      return `${militaryTime} AM`
+    }
+  }
+
   return (
     <ScrollView>
       <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}>
+        
+        {/* Event Image */}
         <Image style={darkModeView ? styles.darkMode.image : styles.lightMode.image} source={{ uri: eventDetails.images?.[0]?.url}} />
+        
+        {/* Event Title */}
         <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{eventDetails.name}</Text>
-        <Text style={darkModeView ? styles.darkMode.venue : styles.lightMode.venue}>{eventDetails._embedded.venues[0].name}</Text>
+        
+        {/* Event Venue */}
+        <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].name}</Text>
+        
+        {/* Event City/State */}
         <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
-          <Text>{eventDetails._embedded.venues[0].city?.name}, </Text>
-          <Text>{eventDetails._embedded.venues[0].state?.stateCode}</Text>
+          <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].city?.name}, </Text>
+          <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].state?.stateCode}</Text>
         </View>
-        <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(eventDetails.dates.start.localDate)}</Text>
+        
+        {/* Event Date/Time */}
+        <View style={darkModeView ? styles.darkMode.dateTimeContainer : styles.lightMode.dateTimeContainer}>
+        
+          {/* Date */}
+          <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>{createPrettyDate(eventDetails.dates.start.localDate)}</Text>
+
+          {/* Time */}
+          {eventDetails.dates.start.localTime ? 
+          <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}> || {createPrettyTime(eventDetails.dates.start.localTime)}</Text>
+          : null }
+        </View>
+
+        {eventDetails.priceRanges ? 
+        <View>
+          <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Price Range</Text>
+          <View>
+            <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>
+              ${eventDetails.priceRanges[0]["min"]} - ${eventDetails.priceRanges[0].max}</Text>
+          </View>
+        </View>
+        : null}
+        
+        {/* Event Details */}
+        {eventDetails.info ?
+        <View>
+          <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Event Details</Text>
+          <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>{eventDetails.info}</Text>
+        </View>
+        : null}
       </View>
     </ScrollView>
   )
@@ -34,8 +84,7 @@ export default EventPage
 const styles = StyleSheet.create({
   lightMode: {
     container: {
-      flex: 1,
-      margin: 10,
+      padding: 20,
     },
     scrollView: {
       
@@ -46,53 +95,34 @@ const styles = StyleSheet.create({
       resizeMode: 'cover', 
       borderRadius: 10,
     },
-    textContainer: {
-      flex: 2, 
-      padding: 10, 
-    },
     title: {
       fontSize: 16,
       fontWeight: 'bold',
-      marginBottom: 5, 
+      marginBottom: 10, 
     },
-    venue: {
+    subheader: {
       fontWeight: 'bold'
     },
-    date: {
+    dateTimeContainer: {
+      flexDirection: 'row',
+      marginBottom: 25,
+    },
+    whiteText: {
+      color: '#000',
       fontSize: 14,
     },
     cityStateContainer: {
       flexDirection: 'row',
+      marginBottom: 10,
     },
-    pageNav: {
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      paddingTop: 10,
-      color: '#000',
-    },
-    pageNavPageNum: {
-      color: '#000',
-    },
-    searchBar: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderColor: 'black',
-      color: '#000',
-      height: 40,
-      borderWidth: 1,
-      margin: 20,
-      color: '#000',
-    }, 
   },
   darkMode: {
     container: {
-      flex: 1,
-      margin: 10,
-      padding: 10,
+      padding: 20,
       backgroundColor: 'black',
     },
     scrollView: {
+      backgroundColor: '#000'
     },
     image: {
       width: undefined,
@@ -103,46 +133,27 @@ const styles = StyleSheet.create({
       borderWidth: 2,
       marginBottom: 10,
     },
-    textContainer: {
-      flex: 2, 
-      padding: 10, 
-    },
     title: {
       fontSize: 16,
       fontWeight: 'bold',
-      marginBottom: 5, 
+      marginBottom: 10, 
       color: '#beffb5'
     },
-    venue: {
+    subheader: {
       fontWeight: 'bold',
       color: '#3589d7',
     },
-    date: {
+    dateTimeContainer: {
+      flexDirection: 'row',
+      marginBottom: 25,
+    },
+    whiteText: {
       fontSize: 14,
-      color: '#fff',
+      color: '#FFF',
     },
     cityStateContainer: {
       flexDirection: 'row',
+      marginBottom: 10, 
     },
-    pageNav: {
-      flexDirection: 'row',
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      paddingTop: 10,
-      color: '#000',
-    },
-    pageNavPageNum: {
-      color: '#000',
-    },
-    searchBar: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderColor: 'black',
-      color: '#000',
-      height: 40,
-      borderWidth: 1,
-      margin: 20,
-      color: '#000',
-    }, 
   }
 })
