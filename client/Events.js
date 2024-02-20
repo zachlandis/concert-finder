@@ -22,9 +22,9 @@ function Events() {
   //   dispatch(fetchEDMEvents())
   // }, [dispatch])
 
-  useEffect(() => {
-    console.log("DarkMode from Context: ", darkModeView)
-  })
+  // useEffect(() => {
+  //   console.log("DarkMode from Context: ", darkModeView)
+  // })
 
   useEffect(() => {
     fetchEDMEvents(currentPage, filter)
@@ -89,11 +89,11 @@ function Events() {
               <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
             </View>
             <View>
-            <Button
-              title='See More'
-              onPress={() => nav.navigate('EventPage', { eventDetails: e })}
-            />
-            </View>
+          </View>
+          <Button
+            title='See More'
+            onPress={() => nav.navigate('EventPage', { eventDetails: e })}
+          />
           </View>
         ))}
       </ScrollView>
