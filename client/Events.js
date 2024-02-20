@@ -3,24 +3,14 @@ import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from './DarkModeContext';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchEDMEvents } from '../Redux/Actions/getEventsActions';
-
 
 function Events() {
-  // const dispatch = useDispatch();
-  // const EDMEvents = useSelector((state) => state.events.events)
   const [EDMEvents, setEDMEvents] = useState([]);
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
   const [filter, setFilter] = useState('')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
-
-
-  // useEffect(() => {
-  //   dispatch(fetchEDMEvents())
-  // }, [dispatch])
 
   // useEffect(() => {
   //   console.log("DarkMode from Context: ", darkModeView)

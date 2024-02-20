@@ -1,16 +1,12 @@
 import React from 'react'
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native'
+import {View, Text, Image, StyleSheet, ScrollView, Button, Linking} from 'react-native'
 import { useDarkMode } from './DarkModeContext';
+import EventProducts from './EventProducts';
 
 function EventPage({ route }) {
 
   const { eventDetails } = route.params;
   const { darkModeView } = useDarkMode();
-
-  // useEffect(() => {
-  //   console.log(eventDetails.info);
-  // })
-
 
   const createPrettyDate = (date) => {
     const splitDate = date.split('-')
@@ -25,6 +21,18 @@ function EventPage({ route }) {
       return `${militaryTime} AM`
     }
   }
+
+  const handlePress = (url) => {
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          console.log("Don't know how to open URI: " + url);
+        }
+      })
+      .catch((err) => console.error('An error occurred', err));
+  };
 
   return (
     <ScrollView>
@@ -64,6 +72,21 @@ function EventPage({ route }) {
             <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>
               ${eventDetails.priceRanges[0]["min"]} - ${eventDetails.priceRanges[0].max}</Text>
           </View>
+        </View>
+        : null}
+
+        <View style={darkModeView ? styles.darkMode.buyTickets : styles.lightMode.buyTickets}>
+          <Button 
+            
+            title='Buy Tickets' 
+            onPress={() => handlePress(eventDetails.url)}
+          />
+        </View>
+
+        {eventDetails.products ? 
+        <View>
+          <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Products and Add-Ons</Text>
+          <EventProducts eventDetails={eventDetails} onHandlePress={handlePress}/>
         </View>
         : null}
         
@@ -115,6 +138,11 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       marginBottom: 10,
     },
+    buyTickets: {
+      borderColor: '#3589d7',
+      borderWidth: 1,
+      margin: 15,
+    },
   },
   darkMode: {
     container: {
@@ -154,6 +182,11 @@ const styles = StyleSheet.create({
     cityStateContainer: {
       flexDirection: 'row',
       marginBottom: 10, 
+    },
+    buyTickets: {
+      borderColor: '#3589d7',
+      borderWidth: 1,
+      margin: 15,
     },
   }
 })
