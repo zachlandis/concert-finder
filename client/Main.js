@@ -7,21 +7,11 @@ import EventStack from './EventStack';
 const Tab = createBottomTabNavigator();
 
 function Main() {
-  const [darkModeView, setDarkModeView] = useState(false)
-  
-
-  const toggleDarkMode = () => {
-    setDarkModeView(!darkModeView)
-  }
-
-  const HomeScreen = () => <Home darkModeView={darkModeView} toggleDarkMode={toggleDarkMode} />;
-  const EventsScreen = () => <Events darkModeView={darkModeView} toggleDarkMode={toggleDarkMode} />;
-
 
   return (
     <Tab.Navigator>
-        <Tab.Screen name='Home' component={HomeScreen} />
-        <Tab.Screen name='Events' component={EventsScreen} />
+        <Tab.Screen name='Home' component={Home} />
+        <Tab.Screen name='Events' component={EventStack} />
     </Tab.Navigator>
     
   )
