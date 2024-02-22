@@ -18,13 +18,13 @@ function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, se
         setFilter={setFilter}
       />
 
-      <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Radius</Text>
+      {/* <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Radius</Text>
       <FilterByRadius 
         radius={radius} 
         setRadius={setRadius}
         postalCode={postalCode}
         setPostalCode={setPostalCode}
-      />
+      /> */}
       
       <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by City, State</Text>
       <FilterByState 

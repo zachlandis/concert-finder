@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderWidth: 1,
         borderRadius: 5,
+        marginBottom: 10,
       },
       lightMode: {
         textInput: { borderColor: '#ccc', color: '#000' },

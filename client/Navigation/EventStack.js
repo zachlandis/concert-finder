@@ -7,8 +7,8 @@ const Stack = createStackNavigator();
 
 function EventStack() {
   return (
-    <Stack.Navigator initialRouteName="EventsOverview">
-      <Stack.Screen name='EventsOverview' component={Events} />
+    <Stack.Navigator initialRouteName="EventsOverview" >
+      <Stack.Screen name='Browse Events' component={Events} />
       <Stack.Screen name='EventPage' component={EventPage} />
     </Stack.Navigator>
   );

@@ -4,7 +4,9 @@ import {View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity} fro
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from './DarkModeContext';
 import EventsFilter from './Filters/EventsFilter';
-import EventAttractions from './EventAttractions';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 function Events() {
   const [EDMEvents, setEDMEvents] = useState([]);
@@ -56,8 +58,15 @@ function Events() {
 
   return (
     <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> 
-
-      <Button title={displayFilter ? 'Close Filter' : "Filter"} onPress={() => setDisplayFilter(!displayFilter)}/>
+      <View style={[styles.filterButtonContainer, darkModeView ? styles.darkMode.filterButtonContainer : styles.lightMode.filterButtonContainer]}>
+      <TouchableOpacity onPress={() => setDisplayFilter(!displayFilter)}>
+        <Icon 
+          name={displayFilter ? 'times' : 'filter'} 
+          size={30} // Adjust icon size as needed
+          color={darkModeView ? 'white' : 'black'} 
+        />
+      </TouchableOpacity>
+      </View>
       {displayFilter ? 
       <View >
           <ScrollView>
@@ -75,7 +84,6 @@ function Events() {
               genre={genre}
               setGenre={setGenre}
             />
-            {/* <Button title='Search' onPress={() => fetchMusicEvents()}/> */}
           </ScrollView>
         </View>
       : null}
@@ -98,8 +106,13 @@ function Events() {
             <View>
               <Text style={darkModeView ? styles.darkMode.venue : styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
               <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
-                <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{e._embedded.venues[0].city?.name}, </Text>
-                <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{e._embedded.venues[0].state?.stateCode}</Text>
+                <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{e._embedded.venues[0].city?.name}</Text>
+                {e._embedded.venues[0].state && 
+                  <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>, {e._embedded.venues[0].state?.stateCode}</Text>
+                }
+                {e._embedded.venues[0].country.countryCode !== 'US' && 
+                  <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>, {e._embedded.venues[0].country?.name}</Text>
+                }
               </View>
             </View>
             <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
@@ -115,6 +128,7 @@ const styles = StyleSheet.create({
   lightMode: {
     container: {
       flex: 1,
+      paddingTop: 50,
     },
     scrollView: {
       
@@ -179,6 +193,9 @@ const styles = StyleSheet.create({
       backgroundColor: 'black',
     },
     scrollView: {
+      
+    },
+    filterButtonContainer: {
       
     },
     eventContainer: {
