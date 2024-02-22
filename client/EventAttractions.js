@@ -22,21 +22,24 @@ const styles = StyleSheet.create({
       greenText: {
         color: '#000',
         fontSize: 14,
-        marginBottom: 10,
       },
       attractionsContainer: {
+        flex: 1,
         flexDirection: 'row',
-
+        flexWrap: 'wrap',
+        marginBottom: 10,
       },
     },
     darkMode: {
       greenText: {
         fontSize: 14,
         color: '#beffb5',
-        marginBottom: 10,
       },
       attractionsContainer: {
+        flex: 1,
         flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginBottom: 10,
       },
     }
   })

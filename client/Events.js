@@ -1,6 +1,6 @@
 import { current } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react'
-import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
+import {View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from './DarkModeContext';
 import EventsFilter from './Filters/EventsFilter';
@@ -16,6 +16,7 @@ function Events() {
   const [radius, setRadius] = useState('')
   const [city, setCity] = useState('')
   const [stateCode, setStateCode] = useState('')
+  const [genre, setGenre] = useState('Music')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
 
@@ -24,11 +25,11 @@ function Events() {
   // })
 
   useEffect(() => {
-    fetchMusicEvents(currentPage, filter, postalCode, radius, stateCode, city);
-  }, [currentPage, filter, postalCode, radius, stateCode, city]);
+    fetchMusicEvents(currentPage, filter, postalCode, radius, stateCode, city, genre);
+  }, [currentPage, filter, postalCode, radius, stateCode, city, genre]);
   
   const fetchMusicEvents = (page) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=${genre}&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -56,7 +57,7 @@ function Events() {
   return (
     <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> 
 
-      <Button title="Filter" onPress={() => setDisplayFilter(!displayFilter)}/>
+      <Button title={displayFilter ? 'Close Filter' : "Filter"} onPress={() => setDisplayFilter(!displayFilter)}/>
       {displayFilter ? 
       <View >
           <ScrollView>
@@ -71,6 +72,8 @@ function Events() {
               setCity={setCity}
               stateCode={stateCode}
               setStateCode={setStateCode}
+              genre={genre}
+              setGenre={setGenre}
             />
             {/* <Button title='Search' onPress={() => fetchMusicEvents()}/> */}
           </ScrollView>
@@ -83,31 +86,27 @@ function Events() {
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
       <ScrollView style={darkModeView ? styles.darkMode.scrollView : styles.lightMode.scrollView}>
-        {EDMEvents.map((e) => (
-          <View style={darkModeView ? styles.darkMode.eventContainer : styles.lightMode.eventContainer} key={e.id}>
-            <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={darkModeView ? styles.lightMode.image : styles.darkMode.image} />
-            <View style={darkModeView ? styles.darkMode.textContainer : styles.lightMode.textContainer}>
-              <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{e.name}</Text>
-              {e._embedded?.venues?.length > 0 && (
-                <View>
-                  <Text style={darkModeView ? styles.darkMode.venue : styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
-                  <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
-                    <Text>{e._embedded.venues[0].city?.name}, </Text>
-                    <Text>{e._embedded.venues[0].state?.stateCode}</Text>
-                  </View>
-                </View>
-              )}
-              <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
-            </View>
+      {EDMEvents.map((e) => (
+        <TouchableOpacity
+          key={e.id}
+          style={darkModeView ? styles.darkMode.eventContainer : styles.lightMode.eventContainer}
+          onPress={() => nav.navigate('EventPage', { eventDetails: e })}
+        >
+          <Image source={{ uri: e.images?.[0]?.url || 'default_image_uri' }} style={darkModeView ? styles.darkMode.image : styles.lightMode.image} />
+          <View style={darkModeView ? styles.darkMode.textContainer : styles.lightMode.textContainer}>
+            <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{e.name}</Text>
             <View>
+              <Text style={darkModeView ? styles.darkMode.venue : styles.lightMode.venue}>{e._embedded.venues[0].name}</Text>
+              <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
+                <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{e._embedded.venues[0].city?.name}, </Text>
+                <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{e._embedded.venues[0].state?.stateCode}</Text>
+              </View>
+            </View>
+            <Text style={darkModeView ? styles.darkMode.date : styles.lightMode.date}>{createPrettyDate(e.dates.start.localDate)}</Text>
           </View>
-          <Button
-            title='See More'
-            onPress={() => nav.navigate('EventPage', { eventDetails: e })}
-          />
-          </View>
-        ))}
-      </ScrollView>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
     </View>
   );
 }
@@ -147,6 +146,11 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
       marginBottom: 5, 
+    },
+    subtitle: {
+      fontSize: 16,
+      marginBottom: 5, 
+      color: '#000',
     },
     venue: {
       fontWeight: 'bold'
@@ -205,6 +209,11 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       marginBottom: 5, 
       color: '#beffb5',
+    },
+    subtitle: {
+      fontSize: 12,
+      marginBottom: 5, 
+      color: '#3589d7',
     },
     venue: {
       fontWeight: 'bold',

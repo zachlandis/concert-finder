@@ -4,8 +4,9 @@ import { useDarkMode } from '../DarkModeContext';
 import FilterByState from './FilterByState';
 import FilterByRadius from './FilterByRadius';
 import FilterByName from './FilterByName';
+import FilterByGenre from './FilterByGenre';
 
-function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, setRadius, stateCode, setStateCode, city, setCity }) {
+function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, setRadius, stateCode, setStateCode, city, setCity, genre, setGenre }) {
   const { darkModeView } = useDarkMode();
 
   return (
@@ -32,6 +33,13 @@ function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, se
         city={city} 
         setCity={setCity}
       />
+
+      <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Genre</Text>
+      <FilterByGenre 
+        genre={genre}
+        setGenre={setGenre}
+      />
+      
 
     </ScrollView>
   );

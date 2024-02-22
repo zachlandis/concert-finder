@@ -46,7 +46,9 @@ function EventPage({ route }) {
         <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{eventDetails.name}</Text>
 
         {/* Event Attractions */}
-        <EventAttractions event={eventDetails}/>
+        {/* <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> */}
+          <EventAttractions event={eventDetails}/>
+        {/* </View> */}
         
         {/* Event Venue */}
         <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].name}</Text>
