@@ -24,12 +24,11 @@ function Events() {
   // })
 
   useEffect(() => {
-    fetchEDMEvents(currentPage, filter, postalCode, radius, stateCode, city);
+    fetchMusicEvents(currentPage, filter, postalCode, radius, stateCode, city);
   }, [currentPage, filter, postalCode, radius, stateCode, city]);
   
-  const fetchEDMEvents = (page, filter, postalCode, radius) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
-    console.log("URL: ", url);
+  const fetchMusicEvents = (page) => {
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -45,7 +44,7 @@ function Events() {
   const handlePageChange = (direction) => {
     const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
     setCurrentPage(newPage);
-    fetchEDMEvents(newPage); 
+    fetchMusicEvents(newPage); 
   };
 
   const createPrettyDate = (date) => {
@@ -73,7 +72,7 @@ function Events() {
               stateCode={stateCode}
               setStateCode={setStateCode}
             />
-            {/* <Button title='Search' onPress={() => fetchEDMEvents()}/> */}
+            {/* <Button title='Search' onPress={() => fetchMusicEvents()}/> */}
           </ScrollView>
         </View>
       : null}
