@@ -4,6 +4,7 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { useDarkMode } from '../DarkModeContext';
 import FilterByState from './FilterByState';
 import FilterByRadius from './FilterByRadius';
+import FilterByName from './FilterByName';
 
 function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, setRadius, stateCode, setStateCode, city, setCity }) {
   const { darkModeView } = useDarkMode();
@@ -15,12 +16,9 @@ function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, se
   return (
     <ScrollView style={[styles.container, darkModeView ? styles.darkMode.container : styles.lightMode.container]}>
       <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Event Name</Text>
-      <TextInput
-        placeholderTextColor={darkModeView ? '#3589d7' : '#000'}
-        style={[styles.textInput, darkModeView ? styles.darkMode.textInput : styles.lightMode.textInput]}
-        value={filter}
-        onChangeText={setFilter}
-      />
+      
+      <FilterByName filter={filter} setFilter={setFilter}/>
+
       <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Radius</Text>
 
       <FilterByRadius 
@@ -48,13 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     fontWeight: 'bold',
-  },
-  textInput: {
-    padding: 10,
-    height: 50,
-    
-    borderWidth: 1,
-    borderRadius: 5,
   },
   lightMode: {
     container: { backgroundColor: '#fff' },
