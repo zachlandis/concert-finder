@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Events from './Events';
-import EventPage from './EventPage'; 
+import Events from '../Events';
+import EventPage from '../EventPage'; 
 
 const Stack = createStackNavigator();
 

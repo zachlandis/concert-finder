@@ -16,7 +16,7 @@ function Events() {
   const [radius, setRadius] = useState('')
   const [city, setCity] = useState('')
   const [stateCode, setStateCode] = useState('')
-  const [genre, setGenre] = useState('Music')
+  const [genre, setGenre] = useState('')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
 
@@ -29,7 +29,7 @@ function Events() {
   }, [currentPage, filter, postalCode, radius, stateCode, city, genre]);
   
   const fetchMusicEvents = (page) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=${genre}&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=${genre}&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
     fetch(url)
       .then(response => response.json())
       .then(data => {
