@@ -8,6 +8,7 @@ function FilterByName({ filter, setFilter }) {
     
   return (
     <TextInput
+        placeholder='Event Name'
         placeholderTextColor={darkModeView ? '#3589d7' : '#000'}
         style={[styles.textInput, darkModeView ? styles.darkMode.textInput : styles.lightMode.textInput]}
         value={filter}

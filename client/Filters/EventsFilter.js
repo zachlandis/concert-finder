@@ -6,7 +6,7 @@ import FilterByRadius from './FilterByRadius';
 import FilterByName from './FilterByName';
 import FilterByGenre from './FilterByGenre';
 
-function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, setRadius, stateCode, setStateCode, city, setCity, genre, setGenre }) {
+function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, setRadius, countryCode, setCountryCode, stateCode, setStateCode, city, setCity, genre, setGenre }) {
   const { darkModeView } = useDarkMode();
 
   return (
@@ -26,8 +26,10 @@ function EventsFilter({ filter, setFilter, postalCode, setPostalCode, radius, se
         setPostalCode={setPostalCode}
       /> */}
       
-      <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by City, State</Text>
+      <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Search by Location</Text>
       <FilterByState 
+        countryCode={countryCode}
+        setCountryCode={setCountryCode}
         stateCode={stateCode} 
         setStateCode={setStateCode} 
         city={city} 

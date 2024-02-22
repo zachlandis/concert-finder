@@ -30,8 +30,9 @@ const styles = StyleSheet.create({
     dropdown: {
         padding: 10,
         height: 50,
+        borderColor: 'gray',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 8,
       },
       lightMode: {
         textInput: { borderColor: '#ccc', color: '#000' },

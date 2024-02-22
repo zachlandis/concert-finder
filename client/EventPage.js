@@ -55,8 +55,13 @@ function EventPage({ route }) {
         
         {/* Event City/State */}
         <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
-          <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].city?.name}, </Text>
-          <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].state?.stateCode}</Text>
+          <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{eventDetails._embedded.venues[0].city?.name}</Text>
+          {eventDetails._embedded.venues[0].state && 
+            <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>, {eventDetails._embedded.venues[0].state?.stateCode}</Text>
+          }          
+          {eventDetails._embedded.venues[0].country.countryCode !== 'US' && 
+            <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>, {eventDetails._embedded.venues[0].country?.name}</Text>
+          }
         </View>
         
         {/* Event Date/Time */}
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: 'bold',
     },
-    subheader: {
+    subtitle: {
       fontWeight: 'bold'
     },
     dateTimeContainer: {
@@ -184,7 +189,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       color: '#beffb5'
     },
-    subheader: {
+    subtitle: {
       fontWeight: 'bold',
       color: '#3589d7',
     },

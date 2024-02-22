@@ -2,17 +2,18 @@ import React, { useEffect } from 'react'
 import {View, StyleSheet, TextInput} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import { useDarkMode } from '../DarkModeContext';
-import { stateDropdown } from '../dropdownData.js/stateDropdown';
+import { stateDropdown, countryDropdown } from '../dropdownData.js/locationsDropdown';
 
-function FilterByState({stateCode, setStateCode, city, setCity}) {
+function FilterByState({countryCode, setCountryCode, stateCode, setStateCode, city, setCity}) {
 
     // useEffect(() => {
-    //     console.log(city)
+    //     console.log(countryCode)
     // })
 
     const { darkModeView } = useDarkMode();
     
   return (
+     <View>
      <View style={styles.container}>
       <TextInput 
         placeholder="City"
@@ -22,7 +23,7 @@ function FilterByState({stateCode, setStateCode, city, setCity}) {
         onChangeText={setCity}
         />
       <Dropdown
-        style={styles.dropdown}
+        style={styles.partialRowDropdown}
         data={stateDropdown}
         value={stateCode}
         onChange={(item) => {
@@ -32,6 +33,20 @@ function FilterByState({stateCode, setStateCode, city, setCity}) {
         valueField="value"
         selectedTextStyle={{ color: darkModeView ? '#3589d7' : '#000' }}
         placeholder='State'
+        placeholderStyle={{ color: darkModeView ? '#3589d7' : '#000' }}
+      />
+    </View>
+      <Dropdown
+        style={styles.fullRowDropdown}
+        data={countryDropdown}
+        value={countryCode}
+        onChange={(item) => {
+          setCountryCode(item.value);
+        }}
+        labelField="label"
+        valueField="value"
+        selectedTextStyle={{ color: darkModeView ? '#3589d7' : '#000' }}
+        placeholder='Country'
         placeholderStyle={{ color: darkModeView ? '#3589d7' : '#000' }}
       />
     </View>
@@ -57,7 +72,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     color: '#3589d7',
   },
-  dropdown: {
+  partialRowDropdown: {
     flex: 1,
     height: 50,
     width: 150,
@@ -68,4 +83,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     color: '#3589d7',
   },
+  fullRowDropdown: {
+    flex: 1,
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    color: '#3589d7',
+    marginBottom: 10,
+  }
 });
