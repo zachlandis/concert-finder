@@ -5,7 +5,7 @@ const DarkModeContext = createContext();
 export const useDarkMode = () => useContext(DarkModeContext);
 
 export const DarkModeProvider = ({ children }) => {
-  const [darkModeView, setDarkModeView] = useState(false);
+  const [darkModeView, setDarkModeView] = useState(true);
 
   const toggleDarkMode = () => setDarkModeView(!darkModeView);
 

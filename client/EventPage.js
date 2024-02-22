@@ -2,6 +2,7 @@ import React from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, Linking} from 'react-native'
 import { useDarkMode } from './DarkModeContext';
 import EventProducts from './EventProducts';
+import EventAttractions from './EventAttractions';
 
 function EventPage({ route }) {
 
@@ -43,6 +44,9 @@ function EventPage({ route }) {
         
         {/* Event Title */}
         <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{eventDetails.name}</Text>
+
+        {/* Event Attractions */}
+        <EventAttractions event={eventDetails}/>
         
         {/* Event Venue */}
         <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].name}</Text>
@@ -65,14 +69,14 @@ function EventPage({ route }) {
           : null }
         </View>
 
-        {eventDetails.priceRanges ? 
         <View>
           <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Price Range</Text>
+        </View>
+        {eventDetails.priceRanges ? 
           <View>
             <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>
               ${eventDetails.priceRanges[0]["min"]} - ${eventDetails.priceRanges[0].max}</Text>
           </View>
-        </View>
         : null}
 
         <View style={darkModeView ? styles.darkMode.buyTickets : styles.lightMode.buyTickets}>
@@ -83,20 +87,32 @@ function EventPage({ route }) {
           />
         </View>
 
+        <View>
+            <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Products and Add-Ons</Text>
+        </View>
         {eventDetails.products ? 
         <View>
-          <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Products and Add-Ons</Text>
           <EventProducts eventDetails={eventDetails} onHandlePress={handlePress}/>
         </View>
-        : null}
+        : 
+        <View>
+          <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>This event doesn't have any products or add-ons.</Text>
+        </View>
+        }
         
         {/* Event Details */}
-        {eventDetails.info ?
         <View>
           <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Event Details</Text>
+        </View>
+        {eventDetails.info ?
+        <View>
           <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>{eventDetails.info}</Text>
         </View>
-        : null}
+        : 
+        <View>
+          <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}>This event doesn't have any details</Text>
+        </View>  
+        }
       </View>
     </ScrollView>
   )
@@ -121,7 +137,6 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 16,
       fontWeight: 'bold',
-      marginBottom: 10, 
     },
     subheader: {
       fontWeight: 'bold'
@@ -133,6 +148,7 @@ const styles = StyleSheet.create({
     whiteText: {
       color: '#000',
       fontSize: 14,
+      marginBottom: 10,
     },
     cityStateContainer: {
       flexDirection: 'row',
@@ -164,7 +180,6 @@ const styles = StyleSheet.create({
     title: {
       fontSize: 16,
       fontWeight: 'bold',
-      marginBottom: 10, 
       color: '#beffb5'
     },
     subheader: {
@@ -178,15 +193,17 @@ const styles = StyleSheet.create({
     whiteText: {
       fontSize: 14,
       color: '#FFF',
+      marginBottom: 10,
     },
     cityStateContainer: {
       flexDirection: 'row',
       marginBottom: 10, 
     },
     buyTickets: {
-      borderColor: '#3589d7',
+      borderColor: '#5a49a8',
       borderWidth: 1,
       margin: 15,
+      color: '#5a49a8',
     },
   }
 })

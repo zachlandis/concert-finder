@@ -12,6 +12,7 @@ function Home() {
             <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Home</Text>
             <Button title='Logout' onPress={() => nav.navigate('Login')} />
             <Button title='Dark Mode' onPress={toggleDarkMode} />
+            <Button title='Open Drawer' onPress={() => nav.navigate('Home Drawer Settings')} />
         </View>
     );
 }

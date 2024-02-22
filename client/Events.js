@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TextInput} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from './DarkModeContext';
-import EventsFilter from './EventsFilter';
+import EventsFilter from './Filters/EventsFilter';
+import EventAttractions from './EventAttractions';
 
 function Events() {
   const [EDMEvents, setEDMEvents] = useState([]);
@@ -13,20 +14,22 @@ function Events() {
   const [filter, setFilter] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [radius, setRadius] = useState('')
+  const [city, setCity] = useState('')
+  const [stateCode, setStateCode] = useState('')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
 
   // useEffect(() => {
-  //   console.log("DarkMode from Context: ", darkModeView)
+  //   console.log("Radius from Events component: ", radius)
   // })
 
   useEffect(() => {
-    fetchEDMEvents(currentPage, filter, postalCode, radius)
-  }, [currentPage, filter, postalCode, radius]); 
+    fetchEDMEvents(currentPage, filter, postalCode, radius, stateCode, city);
+  }, [currentPage, filter, postalCode, radius, stateCode, city]);
   
-  const fetchEDMEvents = (page) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&postalCode=${encodeURIComponent(postalCode)}&radius=${encodeURIComponent(radius)}&unit=miles`;
-
+  const fetchEDMEvents = (page, filter, postalCode, radius) => {
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&stateCode=${stateCode}&city=${city}&&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
+    console.log("URL: ", url);
     fetch(url)
       .then(response => response.json())
       .then(data => {
@@ -37,6 +40,7 @@ function Events() {
       })
       .catch(error => console.error('There was a problem fetching EDM Events', error));
   };
+  
 
   const handlePageChange = (direction) => {
     const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
@@ -55,15 +59,22 @@ function Events() {
 
       <Button title="Filter" onPress={() => setDisplayFilter(!displayFilter)}/>
       {displayFilter ? 
-      <View style={{height: 300}}>
-          <EventsFilter 
-            filter={filter} 
-            setFilter={setFilter} 
-            postalCode={postalCode} 
-            setPostalCode={setPostalCode} 
-            radius={radius}
-            setRadius={setRadius}
-          />
+      <View >
+          <ScrollView>
+            <EventsFilter 
+              filter={filter} 
+              setFilter={setFilter} 
+              postalCode={postalCode} 
+              setPostalCode={setPostalCode} 
+              radius={radius}
+              setRadius={setRadius}
+              city={city}
+              setCity={setCity}
+              stateCode={stateCode}
+              setStateCode={setStateCode}
+            />
+            {/* <Button title='Search' onPress={() => fetchEDMEvents()}/> */}
+          </ScrollView>
         </View>
       : null}
       
