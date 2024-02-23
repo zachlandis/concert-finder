@@ -1,17 +1,17 @@
-import { current } from '@reduxjs/toolkit';
+import { useSelector, useDispatch } from 'react-redux'
 import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { useDarkMode } from '../Context/DarkModeContext';
 import EventsFilter from '../Filters/EventsFilter';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { fetchMusicEvents } from '../Redux/Actions/getEventsActions';
 
 
 
 function Events() {
-  const [musicEvents, setMusicEvents] = useState([]);
-  const [error, setError] = useState('')
-  const [totalPages, setTotalPages] = useState(0);
+  // const [musicEvents, setMusicEvents] = useState([]);
+  // const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [displayFilter, setDisplayFilter] = useState(false);
   const [filter, setFilter] = useState('');
@@ -23,28 +23,14 @@ function Events() {
   const [genre, setGenre] = useState('')
   const nav = useNavigation();
   const { darkModeView } = useDarkMode();
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   console.log("Radius from Events component: ", radius)
-  // })
-
+  const musicEvents = useSelector((state) => state.events.events)
+  const totalPages = useSelector((state) => state.events.totalPages)
+  
   useEffect(() => {
-    fetchMusicEvents(currentPage, filter, postalCode, radius, stateCode, city, genre, countryCode);
-  }, [currentPage, filter, postalCode, radius, stateCode, city, genre, countryCode]);
-  
-  const fetchMusicEvents = (page) => {
-    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=${genre}&sort=date,asc&page=${page}&keyword=${encodeURIComponent(filter)}&countryCode=${countryCode}&stateCode=${stateCode}&city=${city}&postalCode=${encodeURIComponent(postalCode)}&radius=${radius}`;
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        if(data._embedded && data._embedded.events) {
-          setMusicEvents(data._embedded.events);
-          setTotalPages(data.page.totalPages); 
-        } 
-      })
-      .catch(error => setError('There was a problem fetching EDM Events', error));
-  };
-  
+    dispatch(fetchMusicEvents(currentPage, filter, stateCode, city, genre, countryCode))
+  }, [dispatch, currentPage, filter, stateCode, city, genre, countryCode])  
 
   const handlePageChange = (direction) => {
     const newPage = direction === '➡️' ? currentPage + 1 : currentPage - 1;
@@ -64,7 +50,7 @@ function Events() {
       <TouchableOpacity onPress={() => setDisplayFilter(!displayFilter)}>
         <Icon 
           name={displayFilter ? 'times' : 'filter'} 
-          size={30} // Adjust icon size as needed
+          size={30} 
           color={darkModeView ? 'white' : 'black'} 
         />
       </TouchableOpacity>

@@ -5,11 +5,7 @@ import { useDarkMode } from '../Context/DarkModeContext';
 
 function EventProducts({ eventDetails, onHandlePress }) {
     const nav = useNavigation();
-    const { darkModeView } = useDarkMode()
-
-    // useEffect(() => {
-    //     console.log(eventDetails.products)
-    // }, [])
+    const { darkModeView } = useDarkMode();
 
     return (
        

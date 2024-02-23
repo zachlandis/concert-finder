@@ -1,17 +1,20 @@
 import axios from 'axios';
 export const FETCH_EVENTS_SUCCESS = 'FETCH_EVENTS_SUCCESS';
+export const FETCH_EVENTS_ERROR = 'FETCH_EVENTS_ERROR'
 
 
-export const fetchEDMEvents = (currentPage = 1) => {
+export const fetchMusicEvents = (currentPage, filter, stateCode, city, genre, countryCode) => {
     return async (dispatch) => {
-        const resultsPerPage = 10;
-        const response = await axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=KnvZfZ7vAvF&number=${resultsPerPage}&offset=${(currentPage - 1) * resultsPerPage}`);
-
+        const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=D23kNHOosZFqS225UqGpFbM4XOqB1LsC&classificationName=Music&genreId=${genre}&sort=date,asc&page=${currentPage}&keyword=${encodeURIComponent(filter)}&countryCode=${countryCode}&stateCode=${stateCode}&city=${city}`
+        const response = await axios.get(url);
         if (response.status === 200) {
-            const events = response.data._embedded.events;
-            dispatch({ type: 'FETCH_EVENTS_SUCCESS', payload: events });
+            if (response.data._embedded && Array.isArray(response.data._embedded.events)) {
+                const events = response.data._embedded.events;
+                const totalPages = response.data.page.totalPages
+                dispatch({ type: 'FETCH_EVENTS_SUCCESS', payload: { events, totalPages } });
+            }
         } else {
-            console.log("Error fetching events (from getEventsActions)");
+            dispatch({ type: 'FETCH_EVENTS_ERROR', payload: error})
         }
     };
 };

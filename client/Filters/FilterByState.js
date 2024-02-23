@@ -5,11 +5,6 @@ import { useDarkMode } from '../Context/DarkModeContext';
 import { stateDropdown, countryDropdown } from '../dropdownData.js/locationsDropdown';
 
 function FilterByState({countryCode, setCountryCode, stateCode, setStateCode, city, setCity}) {
-
-    // useEffect(() => {
-    //     console.log(countryCode)
-    // })
-
     const { darkModeView } = useDarkMode();
     
   return (

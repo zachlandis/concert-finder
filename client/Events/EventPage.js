@@ -44,14 +44,9 @@ function EventPage({ route }) {
         
         {/* Event Title */}
         <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>{eventDetails.name}</Text>
-
-        {/* Event Attractions */}
-        {/* <View style={darkModeView ? styles.darkMode.container : styles.lightMode.container}> */}
-          <EventAttractions event={eventDetails}/>
-        {/* </View> */}
         
         {/* Event Venue */}
-        <Text style={darkModeView ? styles.darkMode.subheader : styles.lightMode.subheader}>{eventDetails._embedded.venues[0].name}</Text>
+        <Text style={darkModeView ? styles.darkMode.subtitle : styles.lightMode.subtitle}>{eventDetails._embedded.venues[0].name}</Text>
         
         {/* Event City/State */}
         <View style={darkModeView ? styles.darkMode.cityStateContainer : styles.lightMode.cityStateContainer}>
@@ -75,6 +70,10 @@ function EventPage({ route }) {
           <Text style={darkModeView ? styles.darkMode.whiteText : styles.lightMode.whiteText}> || {createPrettyTime(eventDetails.dates.start.localTime)}</Text>
           : null }
         </View>
+
+        {/* Event Attractions */}
+        <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Lineup</Text>
+        <EventAttractions event={eventDetails}/>
 
         <View>
           <Text style={darkModeView ? styles.darkMode.title : styles.lightMode.title}>Price Range</Text>
@@ -143,6 +142,7 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 16,
+      marginBottom: 10,
       fontWeight: 'bold',
     },
     subtitle: {
@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     },
     title: {
       fontSize: 16,
+      marginBottom: 10,
       fontWeight: 'bold',
       color: '#beffb5'
     },

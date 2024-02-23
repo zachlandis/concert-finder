@@ -1,7 +1,7 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeDrawerSettings from '../HomeDrawerSettings';
+import HomeDrawerSettings from '../Home/HomeDrawerSettings';
 import Home from '../Home/Home';
 
 function HomeDrawer() {
