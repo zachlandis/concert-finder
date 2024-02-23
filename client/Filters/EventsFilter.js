@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, ScrollView } from 'react-native';
-import { useDarkMode } from '../DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 import FilterByState from './FilterByState';
 import FilterByRadius from './FilterByRadius';
 import FilterByName from './FilterByName';

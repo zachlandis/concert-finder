@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import {View, StyleSheet, TextInput} from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
-import { useDarkMode } from '../DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 import { stateDropdown, countryDropdown } from '../dropdownData.js/locationsDropdown';
 
 function FilterByState({countryCode, setCountryCode, stateCode, setStateCode, city, setCity}) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextInput, StyleSheet } from 'react-native'
-import { useDarkMode } from '../DarkModeContext'
+import { useDarkMode } from '../Context/DarkModeContext'
 
 function FilterByName({ filter, setFilter }) {
 

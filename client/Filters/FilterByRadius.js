@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, TextInput, StyleSheet } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
-import { useDarkMode } from '../DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 
 function FilterByRadius({radius, setRadius, postalCode, setPostalCode}) {
     const { darkModeView } = useDarkMode();

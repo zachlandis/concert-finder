@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import {View, Text, StyleSheet, ScrollView, Button, Linking} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { useDarkMode } from './DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 
 function EventProducts({ eventDetails, onHandlePress }) {
     const nav = useNavigation();

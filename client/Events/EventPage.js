@@ -1,6 +1,6 @@
 import React from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, Linking} from 'react-native'
-import { useDarkMode } from './DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 import EventProducts from './EventProducts';
 import EventAttractions from './EventAttractions';
 

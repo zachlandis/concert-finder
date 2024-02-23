@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native'
-import { useDarkMode } from './DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 
 function EventAttractions({ event }) {
     const { darkModeView } = useDarkMode();

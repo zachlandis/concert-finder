@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDarkMode } from './DarkModeContext';
+import { useDarkMode } from '../Context/DarkModeContext';
 
 function Home() {
     const nav = useNavigation();

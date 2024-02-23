@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import { genreDropdown } from '../dropdownData.js/genreDropdown';
-import { useDarkMode } from '../DarkModeContext'
+import { useDarkMode } from '../Context/DarkModeContext'
 
 function FilterByGenre({genre, setGenre}) {
 

@@ -2,14 +2,15 @@ import { current } from '@reduxjs/toolkit';
 import React, { useEffect, useState } from 'react'
 import {View, Text, Image, StyleSheet, ScrollView, Button, TouchableOpacity} from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import { useDarkMode } from './DarkModeContext';
-import EventsFilter from './Filters/EventsFilter';
+import { useDarkMode } from '../Context/DarkModeContext';
+import EventsFilter from '../Filters/EventsFilter';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 
 function Events() {
-  const [EDMEvents, setEDMEvents] = useState([]);
+  const [musicEvents, setMusicEvents] = useState([]);
+  const [error, setError] = useState('')
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [displayFilter, setDisplayFilter] = useState(false);
@@ -37,11 +38,11 @@ function Events() {
       .then(response => response.json())
       .then(data => {
         if(data._embedded && data._embedded.events) {
-          setEDMEvents(data._embedded.events);
+          setMusicEvents(data._embedded.events);
           setTotalPages(data.page.totalPages); 
-        }
+        } 
       })
-      .catch(error => console.error('There was a problem fetching EDM Events', error));
+      .catch(error => setError('There was a problem fetching EDM Events', error));
   };
   
 
@@ -97,7 +98,7 @@ function Events() {
         <Button title='➡️' onPress={() => handlePageChange('➡️')} />
       </View>
       <ScrollView style={darkModeView ? styles.darkMode.scrollView : styles.lightMode.scrollView}>
-      {EDMEvents.map((e) => (
+      {musicEvents.map((e) => (
         <TouchableOpacity
           key={e.id}
           style={darkModeView ? styles.darkMode.eventContainer : styles.lightMode.eventContainer}
