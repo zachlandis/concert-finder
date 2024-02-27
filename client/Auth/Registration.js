@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
-
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
-const UserLogin = () => {
+const Registration = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const nav = useNavigation();
 
-  const handleLogin = () => {
-    const auth = getAuth();
-    setErrorMessage('');
+  const auth = getAuth();
 
-    signInWithEmailAndPassword(auth, email, password)
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        console.log('Logged in with:', userCredentials.user.email);
-        nav.navigate('Main')
+          console.log('User registered with:', userCredentials.user.email);
+          nav.navigate('Login')
+
       })
       .catch((error) => {
         setErrorMessage(error.message);
@@ -41,8 +40,7 @@ const UserLogin = () => {
         secureTextEntry
       />
       {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Sign Up" onPress={() => nav.navigate('Registration')} />
+      <Button title="Sign Up" onPress={handleSignUp} />
     </View>
   );
 };
@@ -68,4 +66,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserLogin;
+export default Registration;
