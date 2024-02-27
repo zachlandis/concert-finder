@@ -5,9 +5,9 @@ import { useDarkMode } from '../Context/DarkModeContext';
 
 function EventAttractions({ event }) {
     const { darkModeView } = useDarkMode();
-    const attractionsDisplay = event._embedded?.attractions?.map((attraction, index) => (
-    <Text style={darkModeView ? styles.darkMode.greenText : styles.lightMode.greenText} key={index}>{attraction.name} </Text>
-  ));
+  //   // const attractionsDisplay = event._embedded?.attractions?.map((attraction, index) => (
+  //   // <Text style={darkModeView ? styles.darkMode.greenText : styles.lightMode.greenText} key={index}>{attraction.name} </Text>
+  // ));
 
   const handlePress = (url) => {
     Linking.canOpenURL(url)

@@ -10,8 +10,6 @@ import { fetchMusicEvents } from '../Redux/Actions/getEventsActions';
 
 
 function Events() {
-  // const [musicEvents, setMusicEvents] = useState([]);
-  // const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [displayFilter, setDisplayFilter] = useState(false);
   const [filter, setFilter] = useState('');

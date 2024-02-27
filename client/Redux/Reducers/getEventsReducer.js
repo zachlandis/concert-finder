@@ -1,9 +1,10 @@
-import { FETCH_EVENTS_SUCCESS, FETCH_EVENTS_ERROR } from '../Actions/getEventsActions';
+import { FETCH_EVENTS_SUCCESS, FETCH_EVENTS_ERROR, SET_CURRENT_PAGE } from '../Actions/getEventsActions';
 
 
 const initialEventsState = {
     events: [],
     totalPages: 0,
+    currentPage: 0,
     error: null,
 }
 
@@ -20,7 +21,12 @@ export const eventsReducer = (state = initialEventsState, action) => {
             return {
                 ...state,
                 error: action.payload.error,
-            }
+            };
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.payload,
+            };
             default:
                 return state;
     }
