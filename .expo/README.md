@@ -13,6 +13,7 @@ Concert Finder is a mobile application that allows users to discover concerts in
 
 - **Frontend**: React Native
 - **State Management**: Redux
+- **User Authentication**: Firebase
 - **API**: Ticketmaster API
 
 ## Installation and Setup
